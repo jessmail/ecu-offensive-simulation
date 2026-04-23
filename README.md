@@ -1,4 +1,5 @@
 # ECU Offensive Simulation Framework
+n![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Python 3.12+](https://img.shields.io/badge/Python-3.12+-blue.svg)
 
 A security testing framework for automotive Electronic Control Units (ECUs) via UDS/DoIP protocols. Built for penetration testers and security engineers working on automotive cybersecurity assessments in compliance with ISO 21434.
 
@@ -75,7 +76,7 @@ Supported service IDs:
 
 ```bash
 # Clone the repository
-git clone https://github.com/jalal-essmail/ecu-offensive-simulation.git
+git clone https://github.com/jessmail/ecu-offensive-simulation.git
 cd ecu-offensive-simulation
 
 # Create virtual environment
