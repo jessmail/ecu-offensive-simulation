@@ -1,0 +1,96 @@
+# Generic ECU Profile
+# Adjust parameters to match your target ECU
+
+ecu:
+  name: "Generic Automotive ECU"
+  description: "Standard UDS-capable ECU for security testing"
+  can_id_tx: 0x7E0        # Tester -> ECU request arbitration ID
+  can_id_rx: 0x7E8        # ECU -> Tester response arbitration ID
+
+  # Supported diagnostic sessions
+  supported_sessions:
+    - default              # 0x01
+    - programming          # 0x02
+    - extended             # 0x03
+
+  # SecurityAccess configuration
+  security_access:
+    levels:
+      - level: 0x01        # Standard access
+        seed_length: 4     # Seed length in bytes
+        key_length: 4      # Key length in bytes
+      - level: 0x11        # Programming access
+        seed_length: 4
+        key_length: 4
+    max_attempts: 3        # Attempts before lockout
+    lockout_time: 10       # Lockout duration in seconds
+
+  # Known DIDs for testing
+  dids:
+    readable:
+      - did: 0xF186
+        name: "Active Diagnostic Session"
+        length: 1
+      - did: 0xF187
+        name: "Vehicle Manufacturer Spare Part Number"
+        length: 20
+      - did: 0xF18A
+        name: "System Supplier Identifier"
+        length: 10
+      - did: 0xF18B
+        name: "ECU Manufacturing Date"
+        length: 4
+      - did: 0xF18C
+        name: "ECU Serial Number"
+        length: 16
+      - did: 0xF190
+        name: "VIN"
+        length: 17
+      - did: 0xF191
+        name: "Hardware Version"
+        length: 10
+      - did: 0xF193
+        name: "System Supplier ECU Hardware Number"
+        length: 10
+      - did: 0xF195
+        name: "Software Version"
+        length: 10
+    writable:
+      - did: 0xF190
+        name: "VIN"
+        requires_auth: true
+        length: 17
+
+  # Known routines
+  routines:
+    - id: 0xFF00
+      name: "Erase Memory"
+      requires_auth: true
+    - id: 0xFF01
+      name: "Check Programming Dependencies"
+      requires_auth: false
+    - id: 0x0203
+      name: "Check Programming Pre-Conditions"
+      requires_auth: false
+
+# Interface configuration
+interface:
+  type: "virtual"          # socketcan | pcan | vector | virtual
+  channel: "vcan0"
+  bitrate: 500000          # 500 kbps
+  fd: false                # CAN FD mode
+
+# Timing parameters (ISO 14229-2)
+timing:
+  p2_server_max: 50        # P2 timeout in ms
+  p2_star_server_max: 5000 # P2* extended timeout in ms
+  s3_server: 5000          # Session timeout in ms (S3)
+  response_timeout: 5000   # General response timeout in ms
+
+# DoIP configuration (if applicable)
+doip:
+  enabled: false
+  target_ip: "192.168.1.100"
+  target_port: 13400
+  source_address: 0x0E80
+  target_address: 0x0001

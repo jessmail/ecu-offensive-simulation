@@ -1,0 +1,58 @@
+# Fuzzer Configuration
+
+fuzzer:
+  # General settings
+  strategy: "smart"          # random | sequential | smart | boundary
+  iterations: 10000          # Total fuzz iterations
+  response_timeout: 2.0      # Timeout per request (seconds)
+
+  # Payload settings
+  payload:
+    min_length: 1            # Minimum payload length (bytes)
+    max_length: 7            # Maximum (single-frame ISO-TP limit)
+
+  # Target services to fuzz
+  services:
+    - sid: 0x10              # DiagnosticSessionControl
+      iterations: 500
+      sub_function_range: [0x00, 0xFF]
+    - sid: 0x11              # ECUReset
+      iterations: 200
+      sub_function_range: [0x00, 0x05]
+    - sid: 0x22              # ReadDataByIdentifier
+      iterations: 2000
+      strategy: "boundary"   # Override global strategy
+    - sid: 0x27              # SecurityAccess
+      iterations: 3000
+      strategy: "smart"
+    - sid: 0x2E              # WriteDataByIdentifier
+      iterations: 1000
+    - sid: 0x31              # RoutineControl
+      iterations: 1500
+    - sid: 0x34              # RequestDownload
+      iterations: 500
+    - sid: 0x36              # TransferData
+      iterations: 500
+    - sid: 0x3E              # TesterPresent
+      iterations: 200
+
+  # Crash detection
+  crash_detection:
+    enabled: true
+    retries: 3               # TesterPresent probes after timeout
+    probe_timeout: 5.0       # Timeout for crash detection probes
+    recovery_wait: 10.0      # Wait time after crash before continuing
+
+  # Rate limiting
+  rate_limit:
+    enabled: false
+    requests_per_second: 100
+    burst_size: 10
+
+  # Output settings
+  output:
+    save_all_results: true
+    save_interesting_only: false
+    results_dir: "results/"
+    results_format: "json"
+    real_time_logging: true

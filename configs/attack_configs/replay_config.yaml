@@ -1,0 +1,45 @@
+# Replay Attack Configuration
+
+replay:
+  # Recording settings
+  recording:
+    duration: 60             # Recording duration in seconds
+    output_format: "json"    # json | asc | blf
+    output_dir: "captures/"
+    filter_arb_ids:          # Only record these IDs (empty = all)
+      - 0x7E0
+      - 0x7E8
+
+  # Replay settings
+  playback:
+    preserve_timing: true    # Maintain original inter-message timing
+    speed_factor: 1.0        # Timing multiplier (0.5 = 2x faster)
+    loop_count: 1            # Number of replay iterations
+
+  # SecurityAccess replay
+  security_access:
+    target_level: 0x01       # Access level to test
+    seed_collection_count: 50  # Seeds to collect for reuse analysis
+    delay_between_seeds: 0.5   # Delay between seed requests (seconds)
+
+  # Session timeout testing
+  timeout_test:
+    enabled: true
+    delays:                  # Delays to test (seconds)
+      - 1.0
+      - 2.0
+      - 3.0
+      - 4.0
+      - 5.0
+      - 7.0
+      - 10.0
+      - 15.0
+      - 30.0
+      - 60.0
+
+  # Output settings
+  output:
+    save_all_frames: true
+    save_security_sequences: true
+    results_dir: "results/"
+    results_format: "json"
