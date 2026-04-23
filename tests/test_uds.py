@@ -9,6 +9,8 @@ import pytest
 from src.protocols.uds import (
     DiagnosticSession,
     NegativeResponseCode,
+    ResetType,
+    RoutineControlType,
     ServiceID,
     UDSClient,
     UDSMessage,
@@ -208,7 +210,7 @@ class TestNrcToString:
         assert "Supplier Specific" in nrc_to_string(0x90)
 
     def test_unknown(self):
-        assert "Unknown" in nrc_to_string(0x09)
+        assert "ISO Reserved" in nrc_to_string(0x09)
 
 
 class TestUDSClient:
@@ -326,7 +328,7 @@ class TestUDSClient:
 
         # Reset ECU
         self.recv_mock.return_value = b"\x51\x01"
-        self.client.ecu_reset(1)  # Hard reset
+        self.client.ecu_reset(ResetType.HARD_RESET)
 
         assert self.client.current_session == DiagnosticSession.DEFAULT
         assert self.client.is_authenticated is False
@@ -334,7 +336,7 @@ class TestUDSClient:
     def test_routine_control_start(self):
         self.recv_mock.return_value = b"\x71\x01\xFF\x00"
         response = self.client.routine_control(
-            control_type=1,  # startRoutine
+            control_type=RoutineControlType.START_ROUTINE,
             routine_id=0xFF00,
         )
         sent = self.send_mock.call_args[0][0]

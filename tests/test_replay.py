@@ -264,7 +264,7 @@ class TestReplayAttack:
 
     def test_classify_seed_reuse_severity(self):
         assert ReplayAttack._classify_seed_reuse_severity(1, 100) == "CRITICAL"
-        assert ReplayAttack._classify_seed_reuse_severity(30, 100) == "MEDIUM"
+        assert ReplayAttack._classify_seed_reuse_severity(30, 100) == "HIGH"
         assert ReplayAttack._classify_seed_reuse_severity(95, 100) == "LOW"
         assert ReplayAttack._classify_seed_reuse_severity(100, 100) == "NONE"
         assert ReplayAttack._classify_seed_reuse_severity(0, 0) == "N/A"

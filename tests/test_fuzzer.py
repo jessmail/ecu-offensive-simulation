@@ -183,8 +183,9 @@ class TestECUFuzzer:
 
     def test_fuzz_detects_crash(self):
         """Test crash detection when ECU stops responding."""
-        # First few requests get expected NRC, then timeout
-        responses = [b"\x7F\x27\x12"] * 5 + [None] * 10
+        # First few requests get expected NRC, then timeout on 6th,
+        # crash detection probe succeeds (ECU still alive), so result stays TIMEOUT
+        responses = [b"\x7F\x27\x12"] * 5 + [None] + [b"\x7E\x00"]
         self.can_mock.send_uds_request.side_effect = responses
 
         session = self.fuzzer.fuzz_service(

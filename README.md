@@ -180,4 +180,4 @@ MIT License - see [LICENSE](LICENSE)
 
 ## Author
 
-Jalal Essmail
+J. Essmail

@@ -464,7 +464,8 @@ class ReplayAttack:
             result["findings"].append(
                 "CRITICAL: ECU accepted replayed key for a different seed"
             )
-            result["outcome"] = ReplayResult.SUCCESS.name
+            if result.get("outcome") != ReplayResult.SEED_REUSE_DETECTED.name:
+                result["outcome"] = ReplayResult.SUCCESS.name
         else:
             nrc = key_response[2] if len(key_response) >= 3 else 0xFF
             if nrc == NegativeResponseCode.INVALID_KEY:
